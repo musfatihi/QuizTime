@@ -8,11 +8,10 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table
 public final class Student extends Person{
+    @NonNull
     private LocalDate registrationDate;
 }

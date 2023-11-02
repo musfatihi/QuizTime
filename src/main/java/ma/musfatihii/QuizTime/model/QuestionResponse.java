@@ -1,9 +1,6 @@
 package ma.musfatihii.QuizTime.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -13,10 +10,7 @@ import lombok.*;
 @Entity
 @Table
 public final class QuestionResponse {
-    @Id
-    @ManyToOne
-    private Question question;
-    @ManyToOne
-    private Response response;
+    @EmbeddedId
+    private QuestionResponseCompositeKey questionResponseCompositeKey;
     private double score;
 }

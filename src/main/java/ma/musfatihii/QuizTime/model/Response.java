@@ -3,6 +3,9 @@ package ma.musfatihii.QuizTime.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,4 +20,11 @@ public final class Response {
 
     @NonNull
     private String content;
+
+    /*
+    @OneToMany(mappedBy = "response")
+    private Set<Question> questions = new HashSet<>();
+
+     */
+
 }

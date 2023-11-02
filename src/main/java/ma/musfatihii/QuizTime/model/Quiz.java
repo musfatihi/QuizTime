@@ -3,6 +3,9 @@ package ma.musfatihii.QuizTime.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,4 +30,15 @@ public final class Quiz {
     @ManyToOne
     @NonNull
     private Instructor instructor;
+
+    /*
+    @ManyToMany
+    @JoinTable(
+            name = "question_quiz",
+            joinColumns = @JoinColumn(name = "quiz_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id")
+    )
+    private Set<Question> questions = new HashSet<>();
+
+     */
 }

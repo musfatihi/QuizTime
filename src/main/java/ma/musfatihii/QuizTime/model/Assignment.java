@@ -1,9 +1,6 @@
 package ma.musfatihii.QuizTime.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,12 +13,8 @@ import java.time.LocalDate;
 @Entity
 @Table
 public final class Assignment {
-    @Id
-    @ManyToOne
-    private Student student;
-    @ManyToOne
-    private Quiz quiz;
-    private int attempt;
+    @EmbeddedId
+    private AssignmentCompositeKey assignmentCompositeKey;
     @NonNull
     private LocalDate startDate;
     @NonNull
