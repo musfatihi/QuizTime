@@ -7,18 +7,14 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table
 public final class Assignment {
     @EmbeddedId
     private AssignmentCompositeKey assignmentCompositeKey;
-    @NonNull
     private LocalDate startDate;
-    @NonNull
     private LocalDate endDate;
-    private double obtainedScore;
-    private boolean passed;
+    private double obtainedScore=-1;
+    private boolean passed=false;
 }

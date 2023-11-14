@@ -31,14 +31,4 @@ public final class Quiz {
     @NonNull
     private Instructor instructor;
 
-    /*
-    @ManyToMany
-    @JoinTable(
-            name = "question_quiz",
-            joinColumns = @JoinColumn(name = "quiz_id"),
-            inverseJoinColumns = @JoinColumn(name = "question_id")
-    )
-    private Set<Question> questions = new HashSet<>();
-
-     */
 }

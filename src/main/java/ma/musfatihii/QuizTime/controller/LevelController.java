@@ -1,11 +1,13 @@
 package ma.musfatihii.QuizTime.controller;
 
 
+import jakarta.validation.Valid;
+import ma.musfatihii.QuizTime.DTO.level.CreateLevelRequest;
+import ma.musfatihii.QuizTime.DTO.level.UpdateLevelRequest;
 import ma.musfatihii.QuizTime.exception.LevelNotFoundException;
 import ma.musfatihii.QuizTime.service.LevelService;
 import ma.musfatihii.QuizTime.model.Level;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +27,8 @@ public class LevelController {
     }
 
     @GetMapping
-    public Page<Level> getAllLevels(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return levelService.getAllLevels(page,size);
-
+    public List<Level> getAllLevels() {
+        return levelService.getAllLevels();
     }
 
     @GetMapping("/{id}")
@@ -41,14 +42,16 @@ public class LevelController {
     }
 
     @PostMapping
-    public ResponseEntity<Level> addNewLevel(@RequestBody Level level){
+    public ResponseEntity<Level> addNewLevel(@RequestBody @Valid  CreateLevelRequest createLevelRequest){
+        Level level = new Level(createLevelRequest.getDescription(), createLevelRequest.getMinScore(), createLevelRequest.getMaxScore());
         levelService.addNewLevel(level);
         return ResponseEntity.status(HttpStatus.CREATED).body(level);
     }
 
 
     @PutMapping
-    public ResponseEntity<Level> updateLevel(@RequestBody Level level){
+    public ResponseEntity<Level> updateLevel(@RequestBody @Valid UpdateLevelRequest updateLevelRequest){
+        Level level = new Level(updateLevelRequest.getId(),updateLevelRequest.getDescription(), updateLevelRequest.getMinScore(), updateLevelRequest.getMaxScore());
         if(levelService.updateLevel(level).isPresent()) {return ResponseEntity.status(HttpStatus.CREATED).body(level);}
         else {throw new LevelNotFoundException(level.getId());}
     }
@@ -62,11 +65,6 @@ public class LevelController {
         }else{
             throw new LevelNotFoundException(id);
         }
-    }
-
-    @ExceptionHandler(LevelNotFoundException.class)
-    public ResponseEntity<String> handleLevelNotFoundException(LevelNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
 }

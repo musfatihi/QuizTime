@@ -1,11 +1,10 @@
 package ma.musfatihii.QuizTime.service;
 
+import ma.musfatihii.QuizTime.exception.LevelInfosNotCorrectException;
+import ma.musfatihii.QuizTime.exception.LevelNotCreatedException;
 import ma.musfatihii.QuizTime.repository.LevelRepository;
 import ma.musfatihii.QuizTime.model.Level;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +20,9 @@ public class LevelService {
         this.levelRepository = levelRepository;
     }
 
-    public Page<Level> getAllLevels(int page, int size)
+    public List<Level> getAllLevels()
     {
-        Pageable pageable = PageRequest.of(page,size);
-        return levelRepository.findAll(pageable);
+        return levelRepository.findAll();
     }
 
     public Optional<Level> getLevel(Long id)
@@ -32,9 +30,10 @@ public class LevelService {
         return levelRepository.findById(id);
     }
 
-    public Optional<Level> addNewLevel(Level level) {
-        levelRepository.save(level);
-        return Optional.of(level);
+    public void addNewLevel(Level level) {
+        if(!isMinMaxScoreValid(level)){throw new LevelInfosNotCorrectException();}
+        try{levelRepository.save(level);}
+        catch (Exception ex){throw new LevelNotCreatedException();}
     }
 
     public Optional<Level> updateLevel(Level updatedLevel) {
@@ -59,6 +58,14 @@ public class LevelService {
         {
             levelRepository.deleteById(id);
             return true;
-        }else{return false;}
+        }
+        else
+        {return false;}
+    }
+
+    private Boolean isMinMaxScoreValid(Level level)
+    {
+        if(level.getMinScore()> level.getMaxScore()) {return false;}
+        return true;
     }
 }

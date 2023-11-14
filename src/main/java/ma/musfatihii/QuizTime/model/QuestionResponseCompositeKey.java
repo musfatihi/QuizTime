@@ -2,10 +2,14 @@ package ma.musfatihii.QuizTime.model;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
-import lombok.NonNull;
+import lombok.*;
 
 import java.io.Serializable;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class QuestionResponseCompositeKey implements Serializable {
     @NonNull

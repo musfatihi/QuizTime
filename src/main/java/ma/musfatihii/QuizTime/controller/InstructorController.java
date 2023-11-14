@@ -1,5 +1,7 @@
 package ma.musfatihii.QuizTime.controller;
 
+import jakarta.validation.Valid;
+import ma.musfatihii.QuizTime.DTO.instructor.CreateInstructorRequest;
 import ma.musfatihii.QuizTime.model.Instructor;
 import ma.musfatihii.QuizTime.model.Level;
 import ma.musfatihii.QuizTime.service.InstructorService;
@@ -29,7 +31,13 @@ public class InstructorController {
     }
 
     @PostMapping
-    public ResponseEntity<Instructor> addNewInstructor(@RequestBody Instructor instructor) throws Exception {
+    public ResponseEntity<Instructor> addNewInstructor(@RequestBody @Valid CreateInstructorRequest createInstructorRequest) throws Exception {
+        Instructor instructor = new Instructor();
+        instructor.setAddress(createInstructorRequest.getAddress());
+        instructor.setFirstName(createInstructorRequest.getFirstName());
+        instructor.setLastName(createInstructorRequest.getLastName());
+        instructor.setBirthDate(createInstructorRequest.getBirthDate());
+        instructor.setSpecialty(createInstructorRequest.getSpecialty());
         if(instructorService.addNewInstructor(instructor).isPresent())
         {
             return ResponseEntity.status(HttpStatus.CREATED).body(instructor);

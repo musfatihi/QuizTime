@@ -3,14 +3,14 @@ package ma.musfatihii.QuizTime.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ma.musfatihii.QuizTime.DTO.level.CreateLevelRequest;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table
 public final class Level {
 
     @Id
@@ -23,4 +23,5 @@ public final class Level {
     private double minScore;
     @NonNull
     private double maxScore;
+
 }
