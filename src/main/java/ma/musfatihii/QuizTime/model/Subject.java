@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,5 +25,10 @@ public final class Subject {
     @ManyToOne
     private Subject parent;
 
+    @OneToMany
+    private List<Subject> children;
+
+    @OneToMany
+    private List<Question> questions;
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -31,4 +32,9 @@ public final class Quiz {
     @NonNull
     private Instructor instructor;
 
+    @OneToMany
+    private List<QuestionQuiz> questions;
+
+    @OneToMany
+    private List<Assignment> assignments;
 }

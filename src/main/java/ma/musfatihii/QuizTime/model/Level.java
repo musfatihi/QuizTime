@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import ma.musfatihii.QuizTime.DTO.level.CreateLevelRequest;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,5 +25,8 @@ public final class Level {
     private double minScore;
     @NonNull
     private double maxScore;
+
+    @OneToMany
+    private List<Question> questions;
 
 }

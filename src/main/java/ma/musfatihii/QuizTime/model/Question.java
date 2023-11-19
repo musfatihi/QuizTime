@@ -3,6 +3,8 @@ package ma.musfatihii.QuizTime.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Setter
 @Getter
@@ -38,5 +40,11 @@ public final class Question {
     @NonNull
     @ManyToOne
     private Level level;
+
+    @OneToMany
+    private List<QuestionQuiz> quizzes;
+
+    @OneToMany
+    private List<QuestionResponse> responses;
 
 }

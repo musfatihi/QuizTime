@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LevelService {
+public class LevelService implements ServiceInterface<Level> {
     private final LevelRepository levelRepository;
 
     @Autowired
@@ -20,24 +20,17 @@ public class LevelService {
         this.levelRepository = levelRepository;
     }
 
-    public List<Level> getAllLevels()
-    {
-        return levelRepository.findAll();
-    }
-
-    public Optional<Level> getLevel(Long id)
-    {
-        return levelRepository.findById(id);
-    }
-
-    public void addNewLevel(Level level) {
+    @Override
+    public Optional<Level> save(Level level) {
         if(!isMinMaxScoreValid(level)){throw new LevelInfosNotCorrectException();}
-        try{levelRepository.save(level);}
+        try{levelRepository.save(level);
+        return Optional.of(level);}
         catch (Exception ex){throw new LevelNotCreatedException();}
     }
 
-    public Optional<Level> updateLevel(Level updatedLevel) {
-        Optional<Level> optionalLevel = getLevel(updatedLevel.getId());
+    @Override
+    public Optional<Level> update(Level updatedLevel) {
+        Optional<Level> optionalLevel = findById(updatedLevel.getId());
         if(optionalLevel.isPresent())
         {
             Level level = optionalLevel.get();
@@ -48,19 +41,26 @@ public class LevelService {
 
             levelRepository.save(level);
         }
-
         return optionalLevel;
     }
 
-    public boolean deleteLevel(Long id)
-    {
-        if(getLevel(id).isPresent())
-        {
+    @Override
+    public List<Level> findAll() {
+        return levelRepository.findAll();
+    }
+
+    @Override
+    public Optional<Level> findById(Long id) {
+        return levelRepository.findById(id);
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        if(findById(id).isPresent()) {
             levelRepository.deleteById(id);
             return true;
         }
-        else
-        {return false;}
+        return false;
     }
 
     private Boolean isMinMaxScoreValid(Level level)

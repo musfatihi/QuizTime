@@ -3,6 +3,8 @@ package ma.musfatihii.QuizTime.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -17,5 +19,8 @@ public final class Response {
 
     @NonNull
     private String content;
+
+    @OneToMany
+    private List<QuestionResponse> questions;
 
 }

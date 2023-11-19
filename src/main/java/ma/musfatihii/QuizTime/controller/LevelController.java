@@ -28,12 +28,12 @@ public class LevelController {
 
     @GetMapping
     public List<Level> getAllLevels() {
-        return levelService.getAllLevels();
+        return levelService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Level> getLevel(@PathVariable Long id) {
-        Optional<Level> foundLevel = levelService.getLevel(id);
+        Optional<Level> foundLevel = levelService.findById(id);
         if (foundLevel.isPresent()) {
             return ResponseEntity.ok(foundLevel.get());
         } else {
@@ -44,22 +44,26 @@ public class LevelController {
     @PostMapping
     public ResponseEntity<Level> addNewLevel(@RequestBody @Valid  CreateLevelRequest createLevelRequest){
         Level level = new Level(createLevelRequest.getDescription(), createLevelRequest.getMinScore(), createLevelRequest.getMaxScore());
-        levelService.addNewLevel(level);
+        levelService.save(level);
         return ResponseEntity.status(HttpStatus.CREATED).body(level);
     }
 
 
     @PutMapping
     public ResponseEntity<Level> updateLevel(@RequestBody @Valid UpdateLevelRequest updateLevelRequest){
-        Level level = new Level(updateLevelRequest.getId(),updateLevelRequest.getDescription(), updateLevelRequest.getMinScore(), updateLevelRequest.getMaxScore());
-        if(levelService.updateLevel(level).isPresent()) {return ResponseEntity.status(HttpStatus.CREATED).body(level);}
+        Level level = new Level();
+        level.setId(updateLevelRequest.getId());
+        level.setDescription(updateLevelRequest.getDescription());
+        level.setMinScore(updateLevelRequest.getMinScore());
+        level.setMaxScore(updateLevelRequest.getMaxScore());
+        if(levelService.update(level).isPresent()) {return ResponseEntity.status(HttpStatus.CREATED).body(level);}
         else {throw new LevelNotFoundException(level.getId());}
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLevel(@PathVariable Long id)
     {
-        if(levelService.deleteLevel(id))
+        if(levelService.delete(id))
         {
             return ResponseEntity.ok("Niveau supprimé avec succès");
         }else{
