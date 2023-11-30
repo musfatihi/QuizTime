@@ -1,9 +1,6 @@
 package ma.musfatihii.QuizTime.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -17,6 +14,6 @@ public final class Instructor extends Person{
     @NonNull
     private String specialty;
 
-    @OneToMany
+    @OneToMany(mappedBy = "instructor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Quiz> quizzes;
 }

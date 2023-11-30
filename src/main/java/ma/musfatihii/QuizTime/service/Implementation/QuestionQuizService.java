@@ -1,4 +1,4 @@
-package ma.musfatihii.QuizTime.service;
+package ma.musfatihii.QuizTime.service.Implementation;
 
 import ma.musfatihii.QuizTime.exception.QuestionsQuizInfosNotCorrectException;
 import ma.musfatihii.QuizTime.exception.QuestionsQuizNotCreatedException;
@@ -36,7 +36,7 @@ public class QuestionQuizService {
     private boolean isAllQuestionsValid(List<QuestionQuiz> questionsQuiz)
     {
         for (QuestionQuiz questionQuiz : questionsQuiz) {
-            if(!questionService.getQuestion(questionQuiz.getQuestionQuizCompositeKey().getQuestion().getId()).isPresent()) {return false;}
+            if(!questionService.findById(questionQuiz.getQuestionQuizCompositeKey().getQuestion().getId()).isPresent()) {return false;}
         }
         return true;
     }
@@ -51,6 +51,6 @@ public class QuestionQuizService {
 
     private boolean isQuizValid(List<QuestionQuiz> questionsQuiz)
     {
-        return quizService.getQuiz(questionsQuiz.get(0).getQuestionQuizCompositeKey().getQuiz().getId()).isPresent();
+        return quizService.findById(questionsQuiz.get(0).getQuestionQuizCompositeKey().getQuiz().getId()).isPresent();
     }
 }

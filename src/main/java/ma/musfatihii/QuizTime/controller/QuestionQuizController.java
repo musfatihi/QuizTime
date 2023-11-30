@@ -3,7 +3,7 @@ package ma.musfatihii.QuizTime.controller;
 import jakarta.validation.Valid;
 import ma.musfatihii.QuizTime.DTO.questionsQuiz.CreateQuestionsQuizRequest;
 import ma.musfatihii.QuizTime.model.QuestionQuiz;
-import ma.musfatihii.QuizTime.service.QuestionQuizService;
+import ma.musfatihii.QuizTime.service.Implementation.QuestionQuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

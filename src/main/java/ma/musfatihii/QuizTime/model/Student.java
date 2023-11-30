@@ -1,6 +1,8 @@
 package ma.musfatihii.QuizTime.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 
@@ -14,6 +16,6 @@ import java.util.List;
 public final class Student extends Person{
     private LocalDate registrationDate = LocalDate.now();
 
-    @OneToMany
+    @OneToMany(mappedBy = "assignmentCompositeKey.student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Assignment> assignments;
 }

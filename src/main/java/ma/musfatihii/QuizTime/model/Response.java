@@ -20,7 +20,7 @@ public final class Response {
     @NonNull
     private String content;
 
-    @OneToMany
+    @OneToMany(mappedBy = "questionResponseCompositeKey.response", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<QuestionResponse> questions;
 
 }

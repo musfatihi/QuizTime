@@ -17,9 +17,9 @@ public class UpdateLevelRequest {
 
     @Min(0)
     @Max(100)
-    private double minScore;
+    private double minScore=-1;
 
     @Min(0)
     @Max(100)
-    private double maxScore;
+    private double maxScore=-1;
 }

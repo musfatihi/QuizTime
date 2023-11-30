@@ -15,6 +15,8 @@ public final class QuestionResponse {
     @EmbeddedId
     private QuestionResponseCompositeKey questionResponseCompositeKey;
     private double score;
+    /*
     @OneToMany
     private List<Answer> answers;
+     */
 }

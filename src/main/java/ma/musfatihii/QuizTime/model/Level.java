@@ -3,8 +3,8 @@ package ma.musfatihii.QuizTime.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ma.musfatihii.QuizTime.DTO.level.CreateLevelRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,7 +26,7 @@ public final class Level {
     @NonNull
     private double maxScore;
 
-    @OneToMany
-    private List<Question> questions;
+    @OneToMany(mappedBy = "level", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Question> questions=new ArrayList<>();
 
 }

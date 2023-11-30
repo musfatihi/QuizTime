@@ -28,11 +28,12 @@ public final class Quiz {
     private int maxAttempts;
     @NonNull
     private String notes;
-    @ManyToOne
     @NonNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 
-    @OneToMany
+    @OneToMany(mappedBy = "questionQuizCompositeKey.quiz", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<QuestionQuiz> questions;
 
     @OneToMany

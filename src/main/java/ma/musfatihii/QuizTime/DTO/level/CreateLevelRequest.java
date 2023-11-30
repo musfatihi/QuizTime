@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 public class CreateLevelRequest {
     @NotBlank(message = "La description de niveau ne doit pas etre vide")
     private String description;
     @Min(0)
     @Max(100)
-    private double minScore;
+    private double minScore=-1;
     @Min(0)
     @Max(100)
-    private double maxScore;
+    private double maxScore=-1;
 }

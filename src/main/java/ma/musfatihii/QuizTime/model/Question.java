@@ -33,18 +33,23 @@ public final class Question {
     @NonNull
     private QuestionType type;
 
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Media> mediaList;
+
     @NonNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
     private Subject subject;
 
     @NonNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "level_id")
     private Level level;
 
-    @OneToMany
+    @OneToMany(mappedBy = "questionQuizCompositeKey.question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<QuestionQuiz> quizzes;
 
-    @OneToMany
+    @OneToMany(mappedBy = "questionResponseCompositeKey.question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<QuestionResponse> responses;
 
 }

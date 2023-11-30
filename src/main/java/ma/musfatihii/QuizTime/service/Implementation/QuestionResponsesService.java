@@ -1,7 +1,6 @@
-package ma.musfatihii.QuizTime.service;
+package ma.musfatihii.QuizTime.service.Implementation;
 
 
-import ma.musfatihii.QuizTime.exception.QuestionNotCreated;
 import ma.musfatihii.QuizTime.exception.QuestionNotFoundException;
 import ma.musfatihii.QuizTime.exception.QuestionResponsesInfosNotCorrectException;
 import ma.musfatihii.QuizTime.model.QuestionResponse;
@@ -31,7 +30,7 @@ public class QuestionResponsesService {
 
     public void addNewQuestionResponses(List<QuestionResponse> questionResponses) {
 
-        if(questionService.getQuestion(questionResponses.get(0).getQuestionResponseCompositeKey().getQuestion().getId()).isPresent())
+        if(questionService.findById(questionResponses.get(0).getQuestionResponseCompositeKey().getQuestion().getId()).isPresent())
         {
             if(!isSumScoresValid(questionResponses) || !isNbrResponsesValid(questionResponses) || !isAllResponsesValid(questionResponses)){throw new QuestionResponsesInfosNotCorrectException();}
         }
@@ -49,19 +48,19 @@ public class QuestionResponsesService {
         for (QuestionResponse questionResponse : questionResponses) {
             sum+=questionResponse.getScore();
         }
-        if(sum==questionService.getQuestion(questionResponses.get(0).getQuestionResponseCompositeKey().getQuestion().getId()).get().getMaxScore()){return true;}
+        if(sum==questionService.findById(questionResponses.get(0).getQuestionResponseCompositeKey().getQuestion().getId()).get().getMaxScore()){return true;}
         return false;
     }
 
     private boolean isNbrResponsesValid(List<QuestionResponse> questionResponses)
     {
-        if(questionResponses.size()==questionService.getQuestion(questionResponses.get(0).getQuestionResponseCompositeKey().getQuestion().getId()).get().getNbrResponses()){return true;}
+        if(questionResponses.size()==questionService.findById(questionResponses.get(0).getQuestionResponseCompositeKey().getQuestion().getId()).get().getNbrResponses()){return true;}
         return false;
     }
 
     private boolean isAllResponsesValid(List<QuestionResponse> questionResponses){
         for (QuestionResponse questionResponse : questionResponses) {
-            if(!responseService.getResponse(questionResponse.getQuestionResponseCompositeKey().getResponse().getId()).isPresent())
+            if(!responseService.findById(questionResponse.getQuestionResponseCompositeKey().getResponse().getId()).isPresent())
             {
                 return false;
             }

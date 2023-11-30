@@ -2,9 +2,10 @@ package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
 import ma.musfatihii.QuizTime.DTO.response.CreateResponseRequest;
+import ma.musfatihii.QuizTime.DTO.response.ResponseResp;
 import ma.musfatihii.QuizTime.exception.ResponseNotFoundException;
 import ma.musfatihii.QuizTime.model.Response;
-import ma.musfatihii.QuizTime.service.ResponseService;
+import ma.musfatihii.QuizTime.service.Implementation.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,8 @@ public class ResponseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response> getResponse(@PathVariable Long id) {
-        Optional<Response> foundResponse = responseService.getResponse(id);
+    public ResponseEntity<ResponseResp> getResponse(@PathVariable Long id) {
+        Optional<ResponseResp> foundResponse = responseService.findById(id);
         if (foundResponse.isPresent()) {
             return ResponseEntity.ok(foundResponse.get());
         }
@@ -33,9 +34,8 @@ public class ResponseController {
     }
 
     @PostMapping
-    public ResponseEntity<Response> addNewResponse(@RequestBody @Valid CreateResponseRequest createResponseRequest){
+    public ResponseEntity<ResponseResp> addNewResponse(@RequestBody @Valid CreateResponseRequest createResponseRequest){
         Response response = new Response(createResponseRequest.getContent());
-        responseService.addNewResponse(response);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseService.save(response).get());
     }
 }

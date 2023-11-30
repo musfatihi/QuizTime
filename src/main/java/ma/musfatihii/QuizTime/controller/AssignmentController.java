@@ -1,16 +1,16 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
+import ma.musfatihii.QuizTime.DTO.assignment.AssignmentResp;
 import ma.musfatihii.QuizTime.DTO.assignment.CreateAssignmentRequest;
 import ma.musfatihii.QuizTime.model.Assignment;
-import ma.musfatihii.QuizTime.service.AssignmentService;
+import ma.musfatihii.QuizTime.service.Implementation.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/assignments")
@@ -24,7 +24,7 @@ public class AssignmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Assignment> addNewAssignment(@RequestBody @Valid CreateAssignmentRequest createAssignmentRequest)
+    public ResponseEntity<AssignmentResp> addNewAssignment(@RequestBody @Valid CreateAssignmentRequest createAssignmentRequest)
     {
         Assignment assignment = new Assignment();
 
@@ -32,9 +32,13 @@ public class AssignmentController {
         assignment.setStartDate(createAssignmentRequest.getStartDate());
         assignment.setEndDate(createAssignmentRequest.getEndDate());
 
-        assignmentService.addNewAssignment(assignment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.save(assignment).get());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(assignment);
+    }
 
+    @GetMapping
+    public List<AssignmentResp> getAllAssignments()
+    {
+        return assignmentService.findAll();
     }
 }

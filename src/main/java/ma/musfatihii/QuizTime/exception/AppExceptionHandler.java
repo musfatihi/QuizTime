@@ -121,4 +121,34 @@ public class AppExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(InstructorNotCreatedException.class)
+    public ResponseEntity<String> handleInstructeurNotCreated(InstructorNotCreatedException ex)
+    {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(QuizNotCreatedException.class)
+    public ResponseEntity<String> handleQuizNotCreated(QuizNotCreatedException ex)
+    {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(QuizNotFoundException.class)
+    public ResponseEntity<String> handleQuizNotFound(QuizNotFoundException ex)
+    {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(StudentNotCreatedException.class)
+    public ResponseEntity<String> handleStudentNotCreated(StudentNotCreatedException ex)
+    {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(StudentNotFoundException.class)
+    public ResponseEntity<String> handleStudentNotFound(StudentNotFoundException ex)
+    {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
 }

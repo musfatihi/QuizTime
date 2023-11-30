@@ -11,6 +11,6 @@ import java.util.List;
 @Setter
 @Getter
 public class CreateAnswerRequest {
-    @NotEmpty
-    private List<AnswerCompositeKey> answers;
+    @NotNull
+    private AnswerCompositeKey answer;
 }

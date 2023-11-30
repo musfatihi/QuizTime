@@ -1,9 +1,9 @@
 package ma.musfatihii.QuizTime.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,13 +22,14 @@ public final class Subject {
     @NonNull
     private String title;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
     private Subject parent;
 
-    @OneToMany
-    private List<Subject> children;
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Subject> children=new ArrayList<>();
 
-    @OneToMany
-    private List<Question> questions;
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Question> questions=new ArrayList<>();
 
 }
