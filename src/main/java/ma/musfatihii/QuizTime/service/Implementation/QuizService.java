@@ -1,6 +1,6 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
-import ma.musfatihii.QuizTime.DTO.quiz.QuizResp;
+import ma.musfatihii.QuizTime.dto.quiz.QuizResp;
 import ma.musfatihii.QuizTime.exception.QuizNotCreatedException;
 import ma.musfatihii.QuizTime.exception.QuizNotFoundException;
 import ma.musfatihii.QuizTime.model.Quiz;

@@ -1,6 +1,6 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
-import ma.musfatihii.QuizTime.DTO.instructor.InstructorResp;
+import ma.musfatihii.QuizTime.dto.instructor.InstructorResp;
 import ma.musfatihii.QuizTime.exception.InstructorNotCreatedException;
 import ma.musfatihii.QuizTime.model.Instructor;
 import ma.musfatihii.QuizTime.repository.InstructorRepository;

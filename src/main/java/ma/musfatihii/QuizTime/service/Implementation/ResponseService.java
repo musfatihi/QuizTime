@@ -1,6 +1,6 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
-import ma.musfatihii.QuizTime.DTO.response.ResponseResp;
+import ma.musfatihii.QuizTime.dto.response.ResponseResp;
 import ma.musfatihii.QuizTime.exception.ResponseNotCreatedException;
 import ma.musfatihii.QuizTime.model.Response;
 import ma.musfatihii.QuizTime.repository.ResponseRepository;
@@ -45,7 +45,7 @@ public class ResponseService implements ServiceInterface<Response,Long, Response
 
     @Override
     public List<ResponseResp> findAll() {
-        return null;
+        return List.of(modelMapper.map(responseRepository.findAll(), ResponseResp[].class));
     }
 
 

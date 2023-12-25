@@ -1,11 +1,10 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
-import ma.musfatihii.QuizTime.DTO.question.QuestionResp;
+import ma.musfatihii.QuizTime.dto.question.QuestionResp;
 import ma.musfatihii.QuizTime.exception.LevelNotFoundException;
 import ma.musfatihii.QuizTime.exception.QuestionInfosNotCorrectException;
 import ma.musfatihii.QuizTime.exception.QuestionNotCreated;
 import ma.musfatihii.QuizTime.exception.QuestionNotFoundException;
-import ma.musfatihii.QuizTime.model.Media;
 import ma.musfatihii.QuizTime.model.Question;
 import ma.musfatihii.QuizTime.model.QuestionType;
 import ma.musfatihii.QuizTime.repository.QuestionRepository;

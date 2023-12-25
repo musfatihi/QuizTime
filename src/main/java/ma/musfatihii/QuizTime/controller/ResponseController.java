@@ -1,8 +1,8 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.DTO.response.CreateResponseRequest;
-import ma.musfatihii.QuizTime.DTO.response.ResponseResp;
+import ma.musfatihii.QuizTime.dto.response.CreateResponseRequest;
+import ma.musfatihii.QuizTime.dto.response.ResponseResp;
 import ma.musfatihii.QuizTime.exception.ResponseNotFoundException;
 import ma.musfatihii.QuizTime.model.Response;
 import ma.musfatihii.QuizTime.service.Implementation.ResponseService;
@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,4 +39,10 @@ public class ResponseController {
         Response response = new Response(createResponseRequest.getContent());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseService.save(response).get());
     }
+
+    @GetMapping
+    public List<ResponseResp> getAllResponses() {
+        return responseService.findAll();
+    }
+
 }

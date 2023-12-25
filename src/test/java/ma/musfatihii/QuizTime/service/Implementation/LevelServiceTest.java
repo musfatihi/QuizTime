@@ -3,26 +3,18 @@ package ma.musfatihii.QuizTime.service.Implementation;
 
 
 
-import ma.musfatihii.QuizTime.DTO.level.LevelResp;
 import ma.musfatihii.QuizTime.exception.LevelInfosNotCorrectException;
 import ma.musfatihii.QuizTime.model.Level;
 import ma.musfatihii.QuizTime.repository.LevelRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
-
-import java.util.ArrayList;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)

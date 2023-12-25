@@ -1,8 +1,8 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.DTO.student.CreateStudentRequest;
-import ma.musfatihii.QuizTime.DTO.student.StudentResp;
+import ma.musfatihii.QuizTime.dto.student.CreateStudentRequest;
+import ma.musfatihii.QuizTime.dto.student.StudentResp;
 import ma.musfatihii.QuizTime.model.Student;
 import ma.musfatihii.QuizTime.service.Implementation.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;

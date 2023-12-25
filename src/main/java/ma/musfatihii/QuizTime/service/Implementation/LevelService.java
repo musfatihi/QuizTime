@@ -1,54 +1,34 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
-import ma.musfatihii.QuizTime.DTO.level.LevelResp;
-import ma.musfatihii.QuizTime.exception.LevelInfosNotCorrectException;
-import ma.musfatihii.QuizTime.exception.LevelNotCreatedException;
-import ma.musfatihii.QuizTime.exception.LevelNotFoundException;
+import ma.musfatihii.QuizTime.dto.level.LevelReq;
+import ma.musfatihii.QuizTime.dto.level.LevelResp;
+import ma.musfatihii.QuizTime.exception.*;
 import ma.musfatihii.QuizTime.repository.LevelRepository;
 import ma.musfatihii.QuizTime.model.Level;
 import ma.musfatihii.QuizTime.service.Interface.ServiceInterface;
-import ma.musfatihii.QuizTime.util.Helpers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class LevelService implements ServiceInterface<Level,Long,LevelResp> {
+public class LevelService implements ServiceInterface<LevelReq,Long,LevelResp> {
+
     private final LevelRepository levelRepository;
+    private final ModelMapper modelMapper;
+
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private Helpers<LevelResp> helpers;
-
-    @Autowired
-    public LevelService(LevelRepository levelRepository)
+    public LevelService(LevelRepository levelRepository,
+                        ModelMapper modelMapper)
     {
         this.levelRepository = levelRepository;
-    }
-
-    @Override
-    public Optional<LevelResp> save(Level level) {
-        if(!isMinMaxScoreValid(level)){throw new LevelInfosNotCorrectException();}
-        try{return Optional.of(modelMapper.map(levelRepository.save(level),LevelResp.class));}
-        catch (Exception ex){throw new LevelNotCreatedException();}
-    }
-
-    @Override
-    public Optional<LevelResp> update(Level updatedLevel) {
-        if(!isMinMaxScoreValid(updatedLevel)){throw new LevelInfosNotCorrectException();}
-        Optional<LevelResp> optionalLevelResp = findById(updatedLevel.getId());
-        Level level = modelMapper.map(optionalLevelResp.get(),Level.class);
-
-        level.setDescription(updatedLevel.getDescription());
-        level.setMinScore(updatedLevel.getMinScore());
-        level.setMaxScore(updatedLevel.getMaxScore());
-
-        return Optional.of(modelMapper.map(levelRepository.save(level),LevelResp.class));
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -56,30 +36,70 @@ public class LevelService implements ServiceInterface<Level,Long,LevelResp> {
         return List.of(modelMapper.map(levelRepository.findAll(), LevelResp[].class));
     }
 
+    public Page<LevelResp> findAll(Pageable pageable) {
+
+        Page<Level> levelPage = levelRepository.findAll(pageable);
+
+        return new PageImpl<>(
+                levelPage.getContent().stream()
+                        .map(this::convertLevelToLevelResp)
+                        .collect(Collectors.toList()),
+                levelPage.getPageable(),
+                levelPage.getTotalElements()
+        );
+
+    }
+
+
+    @Override
+    public Optional<LevelResp> save(LevelReq levelReq) {
+        if(!isMinMaxScoreValid(levelReq)){throw new InfosNotCorrectException("Infos Niveau incorrectes");}
+        try{
+            return Optional.of(
+                    modelMapper.map(levelRepository.save(modelMapper.map(levelReq,Level.class)),LevelResp.class)
+            );
+        }
+        catch (Exception ex){throw new ServerErrorException("Erreur serveur");}
+    }
+
+    @Override
+    public Optional<LevelResp> update(LevelReq levelReq) {
+        if(!isMinMaxScoreValid(levelReq)){throw new InfosNotCorrectException("Infos Niveau incorrectes");}
+        levelRepository.findById(levelReq.getId())
+                            .orElseThrow(()->new NotFoundException("Niveau introuvable"));
+        try{
+            return Optional.of(
+                    modelMapper.map(levelRepository.save(modelMapper.map(levelReq,Level.class)),LevelResp.class)
+            );
+        }
+        catch (Exception ex){throw new ServerErrorException("Erreur serveur");}
+    }
+
     @Override
     public Optional<LevelResp> findById(Long id) {
-        Optional<Level> optionalLevel = levelRepository.findById(id);
-        if(optionalLevel.isPresent()) return  Optional.of(modelMapper.map(optionalLevel.get(),LevelResp.class));
-        throw new LevelNotFoundException(id);
+        Level foundLevel = levelRepository.findById(id)
+                            .orElseThrow(()->new NotFoundException("Niveau introuvable"));
+        return  Optional.of(
+                modelMapper.map(foundLevel,LevelResp.class)
+        );
     }
 
     @Override
     public boolean delete(Long id) {
-        if(findById(id).isPresent()) {
-            levelRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
+        levelRepository.findById(id)
+                       .orElseThrow(()->new NotFoundException("Niveau introuvable"));
 
-    public Boolean isMinMaxScoreValid(Level level)
-    {
-        if(level.getMinScore()> level.getMaxScore()) {return false;}
+        levelRepository.deleteById(id);
         return true;
     }
 
-    public Page<LevelResp> findAllLevels(int p) {
-        return helpers.convertListToPage(List.of(modelMapper.map(levelRepository.findAll(), LevelResp[].class)),p,10);
+    public Boolean isMinMaxScoreValid(LevelReq levelReq)
+    {
+        return levelReq.getMaxScore()>=levelReq.getMinScore();
+    }
+
+    private LevelResp convertLevelToLevelResp(Level level) {
+        return modelMapper.map(level,LevelResp.class);
     }
 
 }

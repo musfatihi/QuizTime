@@ -151,4 +151,30 @@ public class AppExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+
+    //--------------------------------------------------------------------------
+
+    @ExceptionHandler(InfosNotCorrectException.class)
+    public ResponseEntity<String> handleInfosNotCorrect(InfosNotCorrectException ex)
+    {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFound(NotFoundException ex)
+    {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ServerErrorException.class)
+    public ResponseEntity<String> handleServerError(ServerErrorException ex)
+    {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
+
+
+
+
+
 }

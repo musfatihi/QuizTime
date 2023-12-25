@@ -2,20 +2,19 @@ package ma.musfatihii.QuizTime.controller;
 
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.DTO.level.CreateLevelRequest;
-import ma.musfatihii.QuizTime.DTO.level.LevelResp;
-import ma.musfatihii.QuizTime.DTO.level.UpdateLevelRequest;
-import ma.musfatihii.QuizTime.exception.LevelNotFoundException;
+import ma.musfatihii.QuizTime.dto.level.LevelReq;
+import ma.musfatihii.QuizTime.dto.level.LevelResp;
 import ma.musfatihii.QuizTime.service.Implementation.LevelService;
-import ma.musfatihii.QuizTime.model.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "api/v1/levels")
+@CrossOrigin
 public class LevelController {
 
     private final LevelService levelService;
@@ -25,9 +24,9 @@ public class LevelController {
         this.levelService = levelService;
     }
 
-    @GetMapping("/p{p}")
-    public Page<LevelResp> getAllLevels(@PathVariable int p) {
-        return levelService.findAllLevels(p);
+    @GetMapping
+    public ResponseEntity<Page<LevelResp>> getLevels(Pageable pageable) {
+        return ResponseEntity.ok(levelService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
@@ -36,30 +35,22 @@ public class LevelController {
     }
 
     @PostMapping
-    public ResponseEntity<LevelResp> addNewLevel(@RequestBody @Valid  CreateLevelRequest createLevelRequest){
-        Level level = new Level(createLevelRequest.getDescription(), createLevelRequest.getMinScore(), createLevelRequest.getMaxScore());
-        return ResponseEntity.status(HttpStatus.CREATED).body(levelService.save(level).get());
+    public ResponseEntity<LevelResp> addLevel(@RequestBody @Valid LevelReq levelReq){
+        return ResponseEntity.status(HttpStatus.CREATED).body(levelService.save(levelReq).get());
     }
 
 
     @PutMapping
-    public ResponseEntity<LevelResp> updateLevel(@RequestBody @Valid UpdateLevelRequest updateLevelRequest){
-        Level level = new Level();
-        level.setId(updateLevelRequest.getId());
-        level.setDescription(updateLevelRequest.getDescription());
-        level.setMinScore(updateLevelRequest.getMinScore());
-        level.setMaxScore(updateLevelRequest.getMaxScore());
-        return ResponseEntity.status(HttpStatus.CREATED).body(levelService.update(level).get());
+    public ResponseEntity<LevelResp> updateLevel(@RequestBody @Valid LevelReq levelReq){
+        return ResponseEntity.status(HttpStatus.CREATED).body(levelService.update(levelReq).get());
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLevel(@PathVariable Long id)
     {
-        if(levelService.delete(id))
-        {
-            return ResponseEntity.ok("Niveau ayant l'id "+id+" est supprimé avec succès");
-        }
-        throw new LevelNotFoundException(id);
+        levelService.delete(id);
+        return ResponseEntity.ok("Niveau ayant l'id "+id+" est supprimé avec succès");
     }
 
 }

@@ -1,7 +1,7 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
 
-import ma.musfatihii.QuizTime.DTO.assignment.AssignmentResp;
+import ma.musfatihii.QuizTime.dto.assignment.AssignmentResp;
 import ma.musfatihii.QuizTime.exception.AssignmentInfosNotCorrectException;
 import ma.musfatihii.QuizTime.exception.AssignmentNotCreatedException;
 import ma.musfatihii.QuizTime.exception.AssignmentNotFoundException;

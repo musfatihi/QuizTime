@@ -1,9 +1,9 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.DTO.subject.CreateSubjectRequest;
-import ma.musfatihii.QuizTime.DTO.subject.SubjectResp;
-import ma.musfatihii.QuizTime.DTO.subject.UpdateSubjectRequest;
+import ma.musfatihii.QuizTime.dto.subject.CreateSubjectRequest;
+import ma.musfatihii.QuizTime.dto.subject.SubjectResp;
+import ma.musfatihii.QuizTime.dto.subject.UpdateSubjectRequest;
 import ma.musfatihii.QuizTime.exception.SubjectNotFoundException;
 import ma.musfatihii.QuizTime.model.Subject;
 import ma.musfatihii.QuizTime.service.Implementation.SubjectService;

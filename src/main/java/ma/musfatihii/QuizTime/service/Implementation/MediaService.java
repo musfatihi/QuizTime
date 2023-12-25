@@ -1,6 +1,6 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
-import ma.musfatihii.QuizTime.DTO.media.MediaResp;
+import ma.musfatihii.QuizTime.dto.media.MediaResp;
 import ma.musfatihii.QuizTime.model.Media;
 import ma.musfatihii.QuizTime.repository.MediaRepository;
 import ma.musfatihii.QuizTime.service.Interface.ServiceInterface;

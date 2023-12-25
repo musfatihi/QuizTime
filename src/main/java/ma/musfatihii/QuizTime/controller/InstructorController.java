@@ -1,18 +1,16 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.DTO.instructor.CreateInstructorRequest;
-import ma.musfatihii.QuizTime.DTO.instructor.InstructorResp;
+import ma.musfatihii.QuizTime.dto.instructor.CreateInstructorRequest;
+import ma.musfatihii.QuizTime.dto.instructor.InstructorResp;
 import ma.musfatihii.QuizTime.model.Instructor;
 import ma.musfatihii.QuizTime.service.Implementation.InstructorService;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/instructors")

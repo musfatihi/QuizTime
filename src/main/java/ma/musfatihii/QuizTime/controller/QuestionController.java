@@ -1,9 +1,9 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.DTO.media.MediaRequest;
-import ma.musfatihii.QuizTime.DTO.question.CreateQuestionRequest;
-import ma.musfatihii.QuizTime.DTO.question.QuestionResp;
+import ma.musfatihii.QuizTime.dto.media.MediaRequest;
+import ma.musfatihii.QuizTime.dto.question.CreateQuestionRequest;
+import ma.musfatihii.QuizTime.dto.question.QuestionResp;
 import ma.musfatihii.QuizTime.exception.QuestionNotFoundException;
 import ma.musfatihii.QuizTime.model.Media;
 import ma.musfatihii.QuizTime.model.Question;

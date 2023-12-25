@@ -1,7 +1,7 @@
 package ma.musfatihii.QuizTime.controller;
 
-import ma.musfatihii.QuizTime.DTO.quiz.CreateQuizRequest;
-import ma.musfatihii.QuizTime.DTO.quiz.QuizResp;
+import ma.musfatihii.QuizTime.dto.quiz.CreateQuizRequest;
+import ma.musfatihii.QuizTime.dto.quiz.QuizResp;
 import ma.musfatihii.QuizTime.model.Quiz;
 import ma.musfatihii.QuizTime.service.Implementation.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
