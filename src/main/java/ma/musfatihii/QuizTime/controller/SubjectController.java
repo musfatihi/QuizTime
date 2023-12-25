@@ -1,11 +1,8 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.dto.subject.CreateSubjectRequest;
+import ma.musfatihii.QuizTime.dto.subject.SubjectReq;
 import ma.musfatihii.QuizTime.dto.subject.SubjectResp;
-import ma.musfatihii.QuizTime.dto.subject.UpdateSubjectRequest;
-import ma.musfatihii.QuizTime.exception.SubjectNotFoundException;
-import ma.musfatihii.QuizTime.model.Subject;
 import ma.musfatihii.QuizTime.service.Implementation.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,12 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/subjects")
 public class SubjectController {
-    private SubjectService subjectService;
+    private final SubjectService subjectService;
 
     @Autowired
     public SubjectController(SubjectService subjectService)
@@ -33,41 +29,25 @@ public class SubjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SubjectResp> getSubject(@PathVariable Long id) {
-        Optional<SubjectResp> foundSubject = subjectService.findById(id);
-        if (foundSubject.isPresent()) {
-            return ResponseEntity.ok(foundSubject.get());
-        } else {
-            throw new SubjectNotFoundException(id);
-        }
+        return ResponseEntity.status(HttpStatus.FOUND).body(subjectService.findById(id).get());
     }
 
     @PostMapping
-    public ResponseEntity<SubjectResp> addNewSubject(@RequestBody @Valid CreateSubjectRequest createSubjectRequest){
-        Subject subject = new Subject(createSubjectRequest.getTitle());
-        subject.setParent(createSubjectRequest.getParent());
-        return ResponseEntity.status(HttpStatus.CREATED).body(subjectService.save(subject).get());
+    public ResponseEntity<SubjectResp> addSubject(@RequestBody @Valid SubjectReq subjectReq){
+        return ResponseEntity.status(HttpStatus.CREATED).body(subjectService.save(subjectReq).get());
     }
 
     @PutMapping
-    public ResponseEntity<SubjectResp> updateSubject(@RequestBody @Valid UpdateSubjectRequest updateSubjectRequest){
-
-        Subject subject = new Subject();
-        subject.setId(updateSubjectRequest.getId());
-        subject.setTitle(updateSubjectRequest.getTitle());
-        subject.setParent(updateSubjectRequest.getParent());
-        Optional<SubjectResp> optionalSubjectResp = subjectService.update(subject);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(optionalSubjectResp.get());
+    public ResponseEntity<SubjectResp> updateSubject(@RequestBody @Valid SubjectReq subjectReq){
+        return ResponseEntity.status(HttpStatus.CREATED).body(subjectService.update(subjectReq).get());
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSubject(@PathVariable Long id)
     {
-        if(subjectService.delete(id))
-        {
-            return ResponseEntity.ok("Sujet ayant l'id "+id+" est supprimé avec succès");
-        }
-        throw new SubjectNotFoundException(id);
+        subjectService.delete(id);
+        return ResponseEntity.ok("Sujet ayant l'id "+id+" est supprimé avec succès");
     }
 
 }

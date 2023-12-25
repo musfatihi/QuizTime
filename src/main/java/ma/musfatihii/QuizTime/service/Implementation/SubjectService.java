@@ -1,6 +1,9 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
+import ma.musfatihii.QuizTime.dto.subject.SubjectReq;
 import ma.musfatihii.QuizTime.dto.subject.SubjectResp;
+import ma.musfatihii.QuizTime.exception.NotFoundException;
+import ma.musfatihii.QuizTime.exception.ServerErrorException;
 import ma.musfatihii.QuizTime.exception.SubjectNotCreatedException;
 import ma.musfatihii.QuizTime.exception.SubjectNotFoundException;
 import ma.musfatihii.QuizTime.model.Subject;
@@ -14,8 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SubjectService implements ServiceInterface<Subject,Long, SubjectResp> {
-    private SubjectRepository subjectRepository;
+public class SubjectService implements ServiceInterface<SubjectReq,Long, SubjectResp> {
+    private final SubjectRepository subjectRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -28,24 +31,37 @@ public class SubjectService implements ServiceInterface<Subject,Long, SubjectRes
 
 
     @Override
-    public Optional<SubjectResp> save(Subject subject) {
-        if(!isParentValid(subject)){throw new SubjectNotFoundException(subject.getParent().getId());}
-        try{return Optional.of(modelMapper.map(subjectRepository.save(subject),SubjectResp.class));}
-        catch (Exception ex){throw new SubjectNotCreatedException();}
+    public Optional<SubjectResp> save(SubjectReq subjectReq) {
+        if(!isParentValid(subjectReq)){throw new NotFoundException("Sujet Parent introuvable");}
+        try{
+            return Optional.of(
+                    modelMapper.map(
+                            subjectRepository.save(
+                                    modelMapper.map(subjectReq,Subject.class)
+                            ),
+                            SubjectResp.class)
+            );
+        }
+        catch (Exception ex){throw new ServerErrorException("Erreur serveur");}
     }
 
     @Override
-    public Optional<SubjectResp> update(Subject subject) {
-        Optional<SubjectResp> optionalSubjectResp = findById(subject.getId());
-        if(optionalSubjectResp.isEmpty()) throw new SubjectNotFoundException(subject.getId());
+    public Optional<SubjectResp> update(SubjectReq subjectReq) {
 
-        if(isParentValid(subject)) {
-            try{return Optional.of(modelMapper.map(subjectRepository.save(subject),SubjectResp.class));}
-            catch(Exception ex){throw new SubjectNotCreatedException();}
+        if(!isSubjectValid(subjectReq)){throw new NotFoundException("Sujet introuvable");}
+        if(!isParentValid(subjectReq)){throw new NotFoundException("Sujet Parent introuvable");}
+        try{
+            return Optional.of(
+                    modelMapper.map(
+                            subjectRepository.save(
+                                    modelMapper.map(subjectReq,Subject.class)
+                            ),
+                            SubjectResp.class)
+            );
         }
-
-        throw new SubjectNotFoundException(subject.getParent().getId());
+        catch (Exception ex){throw new ServerErrorException("Erreur serveur");}
     }
+
 
     @Override
     public List<SubjectResp> findAll() {
@@ -54,28 +70,33 @@ public class SubjectService implements ServiceInterface<Subject,Long, SubjectRes
 
     @Override
     public Optional<SubjectResp> findById(Long id) {
-        Optional<Subject> optionalSubject = subjectRepository.findById(id);
-        if(optionalSubject.isPresent())
-        {
-            return Optional.of(modelMapper.map(optionalSubject.get(),SubjectResp.class));
-        }
-        throw new SubjectNotFoundException(id);
+        Subject foundSubject = subjectRepository.findById(id)
+                            .orElseThrow(()-> new NotFoundException("Sujet introuvable"));
+
+        return Optional.of(
+                modelMapper.map(foundSubject,SubjectResp.class)
+        );
     }
 
     @Override
     public boolean delete(Long id) {
-        if(subjectRepository.findById(id).isPresent()) {
-            subjectRepository.deleteById(id);
-            return true;
-        }
-        return false;
+        subjectRepository.findById(id)
+                        .orElseThrow(()-> new NotFoundException("Sujet introuvable"));
+
+        subjectRepository.deleteById(id);
+        return true;
     }
 
-    private boolean isParentValid(Subject subject)
+    private boolean isParentValid(SubjectReq subjectReq)
     {
-        if(subject.getParent()!=null && subject.getParent().getId()!=null) {
-            return findById(subject.getParent().getId()).isPresent();
+        if(subjectReq.getParent()!=null && subjectReq.getParent().getId()!=null) {
+            return subjectRepository.existsById(subjectReq.getParent().getId());
         }
         return true;
+    }
+
+    private boolean isSubjectValid(SubjectReq subjectReq)
+    {
+        return subjectRepository.existsById(subjectReq.getId());
     }
 }
