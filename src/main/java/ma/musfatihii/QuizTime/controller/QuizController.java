@@ -1,8 +1,8 @@
 package ma.musfatihii.QuizTime.controller;
 
-import ma.musfatihii.QuizTime.dto.quiz.CreateQuizRequest;
+import jakarta.validation.Valid;
+import ma.musfatihii.QuizTime.dto.quiz.QuizReq;
 import ma.musfatihii.QuizTime.dto.quiz.QuizResp;
-import ma.musfatihii.QuizTime.model.Quiz;
 import ma.musfatihii.QuizTime.service.Implementation.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,32 +13,31 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/quizzes")
+@CrossOrigin
 public class QuizController {
-    private QuizService quizService;
+    private final QuizService quizService;
 
     @Autowired
-    public QuizController(QuizService quizService)
-    {
+    public QuizController(QuizService quizService) {
         this.quizService = quizService;
     }
 
     @PostMapping
-    public ResponseEntity<QuizResp> addNewQuiz(@RequestBody CreateQuizRequest createQuizRequest)
+    public ResponseEntity<QuizResp> addQuiz(@RequestBody @Valid QuizReq quizReq)
     {
-        Quiz quiz = new Quiz(createQuizRequest.getSuccessScore(),createQuizRequest.isShowResponses(),createQuizRequest.isShowResults(),createQuizRequest.getMaxAttempts(),createQuizRequest.getNotes(),createQuizRequest.getInstructor());
-        return ResponseEntity.status(HttpStatus.CREATED).body(quizService.save(quiz).get());
+        return ResponseEntity.status(HttpStatus.CREATED).body(quizService.save(quizReq).get());
     }
 
     @GetMapping
     public ResponseEntity<List<QuizResp>> getAllQuizzes()
     {
-        return ResponseEntity.status(HttpStatus.OK).body(quizService.findAll());
+        return ResponseEntity.ok().body(quizService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<QuizResp> getQuiz(@PathVariable Long id)
     {
-        return ResponseEntity.status(HttpStatus.OK).body(quizService.findById(id).get());
+        return ResponseEntity.status(HttpStatus.FOUND).body(quizService.findById(id).get());
     }
 
 }

@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ma.musfatihii.QuizTime.dto.media.MediaResp;
-import ma.musfatihii.QuizTime.dto.questionResponses.QuestionResponseResp;
-import ma.musfatihii.QuizTime.model.QuestionType;
+import ma.musfatihii.QuizTime.dto.questionResponses.QuestionResponsesResp;
+import ma.musfatihii.QuizTime.enums.QuestionType;
 
 import java.util.List;
 
@@ -21,5 +21,5 @@ public class QuestionResp {
     private double maxScore;
     private QuestionType type;
     private List<MediaResp> mediaList;
-    private List<QuestionResponseResp> responses;
+    private List<QuestionResponsesResp> responses;
 }

@@ -1,10 +1,13 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
-import ma.musfatihii.QuizTime.exception.AssignmentNotFoundException;
+import ma.musfatihii.QuizTime.dto.answers.AnswersReq;
+import ma.musfatihii.QuizTime.dto.answers.AnswersResp;
+import ma.musfatihii.QuizTime.exception.InfosNotCorrectException;
 import ma.musfatihii.QuizTime.model.*;
 import ma.musfatihii.QuizTime.repository.AnswerRepository;
 import ma.musfatihii.QuizTime.repository.QuestionResponseRepository;
 import ma.musfatihii.QuizTime.service.Interface.ServiceInterface;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,43 +16,64 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AnswerService implements ServiceInterface<Answer,AnswerCompositeKey,Answer> {
+public class AnswerService implements ServiceInterface<AnswersReq,AnswerCompositeKey, AnswersResp> {
     private final AnswerRepository answerRepository;
     private final QuestionResponseRepository questionResponseRepository;
-
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public AnswerService(AnswerRepository answerRepository,QuestionResponseRepository questionResponseRepository)
+    public AnswerService(AnswerRepository answerRepository,
+                         QuestionResponseRepository questionResponseRepository,
+                         ModelMapper modelMapper)
     {
         this.answerRepository = answerRepository;
         this.questionResponseRepository = questionResponseRepository;
+        this.modelMapper = modelMapper;
     }
 
 
+
+    public double calculateObtainedScore(AssignmentCompositeKey assignmentCompositeKey)
+    {
+        return   findAllAnswers().stream()
+                 .filter(answer -> answer.getAnswerCompositeKey().getAssignment().getAssignmentCompositeKey().equals(assignmentCompositeKey))
+                 .mapToDouble(Answer::getScore)
+                 .sum();
+
+    }
+
     @Override
-    public Optional<Answer> save(Answer answer) {
-        //if(!isAssignmentValid(answer.getAnswerCompositeKey().getAssignment().getAssignmentCompositeKey())) throw new AssignmentNotFoundException();
-        Optional<QuestionResponse> optionalQuestionResponse = questionResponseRepository.findById(answer.getAnswerCompositeKey().getQuestionResponse().getQuestionResponseCompositeKey());
-        if(optionalQuestionResponse.isPresent())
-        {
-            answer.setScore(optionalQuestionResponse.get().getScore());
-            answerRepository.save(answer);
+    public Optional<AnswersResp> save(AnswersReq answersReq) {
+
+        if(!isAnswerValid(answersReq)){throw new InfosNotCorrectException("Ce Quiz est expiré");}
+
+        List<Answer> answers = List.of(modelMapper.map(answersReq.getAnswers(),Answer[].class));
+
+        for(Answer answer : answers){
+            answer.setScore(0);
         }
-        return Optional.of(answer);
-    }
 
-    @Override
-    public Optional<Answer> update(Answer answer) {
+        answerRepository.saveAll(answers);
+
         return Optional.empty();
     }
 
     @Override
-    public List<Answer> findAll() {
+    public Optional<AnswersResp> update(AnswersReq answersReq) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<AnswersResp> findAll() {
+        return null;
+    }
+
+    private List<Answer> findAllAnswers(){
         return answerRepository.findAll();
     }
 
     @Override
-    public Optional<Answer> findById(AnswerCompositeKey answerCompositeKey) {
+    public Optional<AnswersResp> findById(AnswerCompositeKey answerCompositeKey) {
         return Optional.empty();
     }
 
@@ -58,23 +82,8 @@ public class AnswerService implements ServiceInterface<Answer,AnswerCompositeKey
         return false;
     }
 
-    public double calculateObtainedScore(AssignmentCompositeKey assignmentCompositeKey)
-    {
-        return findAll().stream()
-                 .filter(answer -> answer.getAnswerCompositeKey().getAssignment().getAssignmentCompositeKey().equals(assignmentCompositeKey))
-                 .mapToDouble(Answer::getScore)
-                 .sum();
-
+    private boolean isAnswerValid(AnswersReq answersReq){
+        return LocalDate.now().isAfter(answersReq.getAnswers().get(0).getAssignment().getStartDate()) &&
+               LocalDate.now().isBefore(answersReq.getAnswers().get(0).getAssignment().getEndDate());
     }
-
-    /*
-    private boolean isAssignmentValid(AssignmentCompositeKey assignmentCompositeKey)
-    {
-        if(assignmentService.findById(assignmentCompositeKey).get().getStartDate().compareTo(LocalDate.now())<=0 &&
-           assignmentService.findById(assignmentCompositeKey).get().getEndDate().compareTo(LocalDate.now())>=0){
-            return true;
-        }
-        return false;
-    }
-     */
 }

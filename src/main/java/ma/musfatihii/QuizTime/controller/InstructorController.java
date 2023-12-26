@@ -1,9 +1,8 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.dto.instructor.CreateInstructorRequest;
+import ma.musfatihii.QuizTime.dto.instructor.InstructorReq;
 import ma.musfatihii.QuizTime.dto.instructor.InstructorResp;
-import ma.musfatihii.QuizTime.model.Instructor;
 import ma.musfatihii.QuizTime.service.Implementation.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,29 +13,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/instructors")
+@CrossOrigin
 public class InstructorController {
     private final InstructorService instructorService;
 
     @Autowired
-    public InstructorController(InstructorService instructorService)
-    {
+    public InstructorController(InstructorService instructorService) {
         this.instructorService = instructorService;
     }
 
     @GetMapping
-    public List<InstructorResp> getAllInstructors() {
-        return instructorService.findAll();
+    public ResponseEntity<List<InstructorResp>> getAllInstructors() {
+        return ResponseEntity.ok().body(instructorService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<InstructorResp> addNewInstructor(@RequestBody @Valid CreateInstructorRequest createInstructorRequest) throws Exception {
-        Instructor instructor = new Instructor();
-        instructor.setAddress(createInstructorRequest.getAddress());
-        instructor.setFirstName(createInstructorRequest.getFirstName());
-        instructor.setLastName(createInstructorRequest.getLastName());
-        instructor.setBirthDate(createInstructorRequest.getBirthDate());
-        instructor.setSpecialty(createInstructorRequest.getSpecialty());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(instructorService.save(instructor).get());
+    public ResponseEntity<InstructorResp> addInstructor(@RequestBody @Valid InstructorReq instructorReq){
+        return ResponseEntity.status(HttpStatus.CREATED).body(instructorService.save(instructorReq).get());
     }
 }

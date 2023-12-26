@@ -9,8 +9,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 public final class Level {
@@ -19,14 +17,15 @@ public final class Level {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
     private String description;
-    @NonNull
+
     private double minScore;
-    @NonNull
+
     private double maxScore;
 
-    @OneToMany(mappedBy = "level", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "level",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private List<Question> questions=new ArrayList<>();
 
 }

@@ -1,23 +1,19 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
-import ma.musfatihii.QuizTime.dto.questionsQuiz.CreateQuestionsQuizRequest;
-import ma.musfatihii.QuizTime.model.QuestionQuiz;
+import ma.musfatihii.QuizTime.dto.questionsQuiz.QuestionsQuizReq;
+import ma.musfatihii.QuizTime.dto.questionsQuiz.QuestionsQuizResp;
 import ma.musfatihii.QuizTime.service.Implementation.QuestionQuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "api/v1/questsquiz")
+@CrossOrigin
 public class QuestionQuizController {
-    private QuestionQuizService questionQuizService;
+    private final QuestionQuizService questionQuizService;
 
     @Autowired
     public QuestionQuizController(QuestionQuizService questionQuizService)
@@ -26,11 +22,9 @@ public class QuestionQuizController {
     }
 
     @PostMapping
-    public ResponseEntity<List<QuestionQuiz>> addNewQuestionsQuiz(@RequestBody @Valid CreateQuestionsQuizRequest createQuestionsQuizRequest)
+    public ResponseEntity<QuestionsQuizResp> addQuestionsQuiz(@RequestBody @Valid QuestionsQuizReq questionsQuizReq)
     {
-        questionQuizService.addNewQuestionsQuiz(createQuestionsQuizRequest.getQuestionsQuiz());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(createQuestionsQuizRequest.getQuestionsQuiz());
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionQuizService.save(questionsQuizReq).get());
     }
 
 }

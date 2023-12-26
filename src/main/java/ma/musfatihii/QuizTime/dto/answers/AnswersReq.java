@@ -2,12 +2,16 @@ package ma.musfatihii.QuizTime.dto.answers;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ma.musfatihii.QuizTime.model.AnswerCompositeKey;
 
-@Setter
+import java.util.List;
+
 @Getter
-public class CreateAnswerRequest {
+@Setter
+@NoArgsConstructor
+public class AnswersReq {
     @NotNull
-    private AnswerCompositeKey answer;
+    private List<AnswerCompositeKey> answers;
 }

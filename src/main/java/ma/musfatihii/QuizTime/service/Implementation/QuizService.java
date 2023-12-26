@@ -1,9 +1,11 @@
 package ma.musfatihii.QuizTime.service.Implementation;
 
+import ma.musfatihii.QuizTime.dto.quiz.QuizReq;
 import ma.musfatihii.QuizTime.dto.quiz.QuizResp;
-import ma.musfatihii.QuizTime.exception.QuizNotCreatedException;
-import ma.musfatihii.QuizTime.exception.QuizNotFoundException;
+import ma.musfatihii.QuizTime.exception.InfosNotCorrectException;
+import ma.musfatihii.QuizTime.exception.NotFoundException;
 import ma.musfatihii.QuizTime.model.Quiz;
+import ma.musfatihii.QuizTime.repository.InstructorRepository;
 import ma.musfatihii.QuizTime.repository.QuizRepository;
 import ma.musfatihii.QuizTime.service.Interface.ServiceInterface;
 import org.modelmapper.ModelMapper;
@@ -14,33 +16,34 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class QuizService implements ServiceInterface<Quiz,Long,QuizResp> {
-    private QuizRepository quizRepository;
+public class QuizService implements ServiceInterface<QuizReq,Long,QuizResp> {
+    private final QuizRepository quizRepository;
+    private final InstructorRepository instructorRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-
-    @Autowired
-    public QuizService(QuizRepository quizRepository)
-    {
+    public QuizService(QuizRepository quizRepository,
+                       ModelMapper modelMapper,
+                       InstructorRepository instructorRepository) {
         this.quizRepository = quizRepository;
+        this.modelMapper = modelMapper;
+        this.instructorRepository = instructorRepository;
     }
 
 
     @Override
-    public Optional<QuizResp> save(Quiz quiz) {
-        Quiz savedQuiz;
-        try {
-            savedQuiz = quizRepository.save(quiz);
-        }catch (Exception ex){
-            throw new QuizNotCreatedException();
-        }
-        return Optional.of(modelMapper.map(savedQuiz, QuizResp.class));
+    public Optional<QuizResp> save(QuizReq quizReq) {
+        if(!isInstructorValid(quizReq)){throw new InfosNotCorrectException("Infos Quiz incorrectes");}
+        return Optional.of(
+                modelMapper.map(
+                        quizRepository.save(modelMapper.map(quizReq,Quiz.class))
+                        ,QuizResp.class
+                )
+        );
     }
 
     @Override
-    public Optional<QuizResp> update(Quiz quiz) {
+    public Optional<QuizResp> update(QuizReq quizReq) {
         return Optional.empty();
     }
 
@@ -51,14 +54,19 @@ public class QuizService implements ServiceInterface<Quiz,Long,QuizResp> {
 
     @Override
     public Optional<QuizResp> findById(Long id) {
-        Optional<Quiz> optionalQuiz = quizRepository.findById(id);
-        if(optionalQuiz.isEmpty()) throw new QuizNotFoundException(id);
-        return Optional.of(modelMapper.map(optionalQuiz.get(), QuizResp.class));
+        Quiz foundQuiz = quizRepository.findById(id)
+                .orElseThrow(()->new NotFoundException("Quiz introuvable"));
+
+        return Optional.of(modelMapper.map(foundQuiz, QuizResp.class));
     }
 
     @Override
     public boolean delete(Long id) {
         return false;
+    }
+
+    private boolean isInstructorValid(QuizReq quizReq) {
+        return instructorRepository.existsById(quizReq.getInstructor().getId());
     }
 
 }

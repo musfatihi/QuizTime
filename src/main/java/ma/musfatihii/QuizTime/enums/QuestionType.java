@@ -1,4 +1,4 @@
-package ma.musfatihii.QuizTime.model;
+package ma.musfatihii.QuizTime.enums;
 
 public enum QuestionType {
     OneTrueResponse,

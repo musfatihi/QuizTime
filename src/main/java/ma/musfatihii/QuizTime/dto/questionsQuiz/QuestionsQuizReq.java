@@ -2,6 +2,7 @@ package ma.musfatihii.QuizTime.dto.questionsQuiz;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ma.musfatihii.QuizTime.model.QuestionQuiz;
 
@@ -9,7 +10,8 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CreateQuestionsQuizRequest {
+@NoArgsConstructor
+public class QuestionsQuizReq {
     @NotEmpty
     private List<QuestionQuiz> questionsQuiz;
 }

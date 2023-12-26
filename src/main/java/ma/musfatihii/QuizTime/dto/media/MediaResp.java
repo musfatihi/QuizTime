@@ -1,7 +1,7 @@
 package ma.musfatihii.QuizTime.dto.media;
 
 import lombok.*;
-import ma.musfatihii.QuizTime.model.MediaType;
+import ma.musfatihii.QuizTime.enums.MediaType;
 
 @Getter
 @Setter

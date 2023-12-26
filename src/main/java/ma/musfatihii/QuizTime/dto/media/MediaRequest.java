@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ma.musfatihii.QuizTime.model.MediaType;
+import ma.musfatihii.QuizTime.enums.MediaType;
 
 @Getter
 @Setter

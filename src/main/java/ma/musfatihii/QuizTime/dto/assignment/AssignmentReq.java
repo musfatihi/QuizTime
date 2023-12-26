@@ -2,18 +2,24 @@ package ma.musfatihii.QuizTime.dto.assignment;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ma.musfatihii.QuizTime.model.AssignmentCompositeKey;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
-public class CreateAssignmentRequest {
+@NoArgsConstructor
+public class AssignmentReq {
+
     @NotNull
     private AssignmentCompositeKey assignmentCompositeKey;
-    @NotNull
+
+    @DateTimeFormat
     private LocalDate startDate;
-    @NotNull
+    
+    @DateTimeFormat
     private LocalDate endDate;
 }

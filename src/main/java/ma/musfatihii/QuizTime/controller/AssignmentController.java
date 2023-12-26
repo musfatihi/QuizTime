@@ -1,9 +1,8 @@
 package ma.musfatihii.QuizTime.controller;
 
 import jakarta.validation.Valid;
+import ma.musfatihii.QuizTime.dto.assignment.AssignmentReq;
 import ma.musfatihii.QuizTime.dto.assignment.AssignmentResp;
-import ma.musfatihii.QuizTime.dto.assignment.CreateAssignmentRequest;
-import ma.musfatihii.QuizTime.model.Assignment;
 import ma.musfatihii.QuizTime.service.Implementation.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,31 +13,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/assignments")
+@CrossOrigin
 public class AssignmentController {
-    private AssignmentService assignmentService;
+    private final AssignmentService assignmentService;
 
     @Autowired
-    public AssignmentController(AssignmentService assignmentService)
-    {
+    public AssignmentController(AssignmentService assignmentService) {
         this.assignmentService = assignmentService;
     }
 
     @PostMapping
-    public ResponseEntity<AssignmentResp> addNewAssignment(@RequestBody @Valid CreateAssignmentRequest createAssignmentRequest)
+    public ResponseEntity<AssignmentResp> addAssignment(@RequestBody @Valid AssignmentReq assignmentReq)
     {
-        Assignment assignment = new Assignment();
-
-        assignment.setAssignmentCompositeKey(createAssignmentRequest.getAssignmentCompositeKey());
-        assignment.setStartDate(createAssignmentRequest.getStartDate());
-        assignment.setEndDate(createAssignmentRequest.getEndDate());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.save(assignment).get());
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.save(assignmentReq).get());
     }
 
     @GetMapping
-    public List<AssignmentResp> getAllAssignments()
-    {
-        return assignmentService.findAll();
+    public ResponseEntity<List<AssignmentResp>> getAllAssignments(){
+        return ResponseEntity.ok().body(assignmentService.findAll());
     }
 }

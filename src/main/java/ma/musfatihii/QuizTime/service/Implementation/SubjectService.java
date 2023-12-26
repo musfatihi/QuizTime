@@ -4,8 +4,6 @@ import ma.musfatihii.QuizTime.dto.subject.SubjectReq;
 import ma.musfatihii.QuizTime.dto.subject.SubjectResp;
 import ma.musfatihii.QuizTime.exception.NotFoundException;
 import ma.musfatihii.QuizTime.exception.ServerErrorException;
-import ma.musfatihii.QuizTime.exception.SubjectNotCreatedException;
-import ma.musfatihii.QuizTime.exception.SubjectNotFoundException;
 import ma.musfatihii.QuizTime.model.Subject;
 import ma.musfatihii.QuizTime.repository.SubjectRepository;
 import ma.musfatihii.QuizTime.service.Interface.ServiceInterface;

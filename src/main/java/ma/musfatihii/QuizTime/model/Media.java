@@ -2,6 +2,7 @@ package ma.musfatihii.QuizTime.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ma.musfatihii.QuizTime.enums.MediaType;
 
 @Getter
 @Setter

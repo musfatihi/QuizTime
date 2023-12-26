@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class QuestionResponseResp {
+public class QuestionResponsesResp {
     private QuestionResponseKey questionResponseCompositeKey;
     private double score;
 }

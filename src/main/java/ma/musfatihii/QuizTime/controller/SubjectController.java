@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/subjects")
+@CrossOrigin
 public class SubjectController {
     private final SubjectService subjectService;
 

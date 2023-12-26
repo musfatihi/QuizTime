@@ -1,11 +1,17 @@
 package ma.musfatihii.QuizTime.dto.quiz;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ma.musfatihii.QuizTime.model.Instructor;
+
 @Getter
-public class CreateQuizRequest {
+@Setter
+@NoArgsConstructor
+public class QuizReq {
     @NotNull
     @Min(0)
     private double successScore;
@@ -16,7 +22,7 @@ public class CreateQuizRequest {
     @NotNull
     @Min(1)
     private int maxAttempts;
-    @NotNull
+    @NotBlank
     private String notes;
     @NotNull
     private Instructor instructor;
